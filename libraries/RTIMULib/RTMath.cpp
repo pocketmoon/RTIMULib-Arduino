@@ -49,6 +49,23 @@ void RTMath::display(const char *label, RTQuaternion& quat)
 	Serial.print(" z:"); Serial.print(quat.z());
 }
 
+RTFLOAT RTMath::invSqRt(RTFLOAT x)
+{
+	long i;
+	float x2, y;
+	void *temp;
+	
+	x2 = x * 0.5f;
+	y = x;
+	temp = &y;
+	i = *(long *)temp;
+	i = 0x5f3759df - (i >> 1);
+	temp = &i;
+	y = *(float *)temp;
+	y = y * (1.5f - (x2 * y * y));
+	return y;
+}
+
 RTVector3 RTMath::poseFromAccelMag(const RTVector3& accel, const RTVector3& mag)
 {
     RTVector3 result;
@@ -189,15 +206,15 @@ void RTVector3::accelToQuaternion(RTQuaternion& qPose) const
 
 void RTVector3::normalize()
 {
-    RTFLOAT length = sqrt(m_data[0] * m_data[0] + m_data[1] * m_data[1] +
+    RTFLOAT invLength = RTMath::invSqRt(m_data[0] * m_data[0] + m_data[1] * m_data[1] +
             m_data[2] * m_data[2]);
 
-    if (length == 0)
+    if ((invLength == 0) || (invLength == 1))
         return;
 
-    m_data[0] /= length;
-    m_data[1] /= length;
-    m_data[2] /= length;
+    m_data[0] *= invLength;
+    m_data[1] *= invLength;
+    m_data[2] *= invLength;
 }
 
 //----------------------------------------------------------
@@ -330,16 +347,16 @@ void RTQuaternion::zero()
 
 void RTQuaternion::normalize()
 {
-    RTFLOAT length = sqrt(m_data[0] * m_data[0] + m_data[1] * m_data[1] +
+    RTFLOAT invLength = RTMath::invSqRt(m_data[0] * m_data[0] + m_data[1] * m_data[1] +
             m_data[2] * m_data[2] + m_data[3] * m_data[3]);
 
-    if ((length == 0) || (length == 1))
+    if ((invLength == 0) || (invLength == 1))
         return;
 
-    m_data[0] /= length;
-    m_data[1] /= length;
-    m_data[2] /= length;
-    m_data[3] /= length;
+    m_data[0] *= invLength;
+    m_data[1] *= invLength;
+    m_data[2] *= invLength;
+    m_data[3] *= invLength;
 }
 
 void RTQuaternion::toEuler(RTVector3& vec)

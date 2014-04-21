@@ -35,7 +35,7 @@ RTIMUSettings settings;                               // the settings object
 
 //  DISPLAY_INTERVAL sets the rate at which results are displayed
 
-#define DISPLAY_INTERVAL  200                         // 5 times per second by default
+#define DISPLAY_INTERVAL  300                         // interval between pose displays
 
 //  SERIAL_PORT_SPEED defines the speed to use for the debug serial port
 
@@ -54,9 +54,10 @@ void setup()
   imu = RTIMU::createIMU(&settings);                        // create the imu object
   
   Serial.print("ArduinoIMU starting using device "); Serial.println(imu->IMUName());
-  if ((errcode = imu->IMUInit()) < 0)
+  if ((errcode = imu->IMUInit()) < 0) {
     Serial.print("Failed to init IMU: "); Serial.println(errcode);
-    
+  }
+  
   if (imu->getCalibrationValid())
     Serial.println("Using compass calibration");
   else

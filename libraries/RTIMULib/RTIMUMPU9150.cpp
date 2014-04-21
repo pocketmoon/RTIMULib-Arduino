@@ -161,17 +161,7 @@ int RTIMUMPU9150::IMUInit()
     if (!I2Cdev::writeByte(m_slaveAddr, MPU9150_PWR_MGMT_1, 0x80))
         return -1;
 
-    for (loop = 0; loop < 10; loop++) {
-        if (!I2Cdev::readByte(m_slaveAddr, MPU9150_PWR_MGMT_1, &result))
-            return -2;
-
-        if ((result & 0x80) == 0)
-            break;                                          // reset complete
-        delay(50);
-    }
-    if (loop == 10) {
-        return -3;
-    }
+	delay(100);
 
     if (!I2Cdev::writeByte(m_slaveAddr, MPU9150_PWR_MGMT_1, 0x00))
         return -4;
@@ -199,23 +189,24 @@ int RTIMUMPU9150::IMUInit()
 
     //  now configure compass
 
-    bypassOn();
+    if (!bypassOn())
+		return -11;
 
     // get fuse ROM data
 
     if (!I2Cdev::writeByte(AK8975_ADDRESS, AK8975_CNTL, 0)) {
         bypassOff();
-        return -11;
+        return -12;
     }
 
     if (!I2Cdev::writeByte(AK8975_ADDRESS, AK8975_CNTL, 0x0f)) {
         bypassOff();
-        return -12;
+        return -13;
     }
 
     if (!I2Cdev::writeBytes(AK8975_ADDRESS, AK8975_ASAX, 3, asa)) {
         bypassOff();
-        return -13;
+        return -14;
     }
 
     //  convert asa to usable scale factor
@@ -226,58 +217,59 @@ int RTIMUMPU9150::IMUInit()
 
     if (!I2Cdev::writeByte(AK8975_ADDRESS, AK8975_CNTL, 0)) {
         bypassOff();
-        return -14;
+        return -15;
     }
 
-    bypassOff();
+    if (!bypassOff())
+		return -16;
 
     //  now set up MPU9150 to talk to the compass chip
 
     if (!I2Cdev::writeByte(m_slaveAddr, MPU9150_I2C_MST_CTRL, 0x40))
-        return -15;
-
-    if (!I2Cdev::writeByte(m_slaveAddr, MPU9150_I2C_SLV0_ADDR, 0x80 | AK8975_ADDRESS))
-        return -16;
-
-    if (!I2Cdev::writeByte(m_slaveAddr, MPU9150_I2C_SLV0_REG, AK8975_ST1))
         return -17;
 
-    if (!I2Cdev::writeByte(m_slaveAddr, MPU9150_I2C_SLV0_CTRL, 0x88))
+    if (!I2Cdev::writeByte(m_slaveAddr, MPU9150_I2C_SLV0_ADDR, 0x80 | AK8975_ADDRESS))
         return -18;
 
-    if (!I2Cdev::writeByte(m_slaveAddr, MPU9150_I2C_SLV1_ADDR, AK8975_ADDRESS))
+    if (!I2Cdev::writeByte(m_slaveAddr, MPU9150_I2C_SLV0_REG, AK8975_ST1))
         return -19;
 
-    if (!I2Cdev::writeByte(m_slaveAddr, MPU9150_I2C_SLV1_REG, AK8975_CNTL))
+    if (!I2Cdev::writeByte(m_slaveAddr, MPU9150_I2C_SLV0_CTRL, 0x88))
         return -20;
 
-    if (!I2Cdev::writeByte(m_slaveAddr, MPU9150_I2C_SLV1_CTRL, 0x81))
+    if (!I2Cdev::writeByte(m_slaveAddr, MPU9150_I2C_SLV1_ADDR, AK8975_ADDRESS))
         return -21;
 
-    if (!I2Cdev::writeByte(m_slaveAddr, MPU9150_I2C_SLV1_DO, 0x1))
+    if (!I2Cdev::writeByte(m_slaveAddr, MPU9150_I2C_SLV1_REG, AK8975_CNTL))
         return -22;
 
-    if (!I2Cdev::writeByte(m_slaveAddr, MPU9150_I2C_MST_DELAY_CTRL, 0x3))
+    if (!I2Cdev::writeByte(m_slaveAddr, MPU9150_I2C_SLV1_CTRL, 0x81))
         return -23;
 
-    if (!I2Cdev::writeByte(m_slaveAddr, MPU9150_YG_OFFS_TC, 0x80))
+    if (!I2Cdev::writeByte(m_slaveAddr, MPU9150_I2C_SLV1_DO, 0x1))
         return -24;
 
-    if (!setCompassRate())
+    if (!I2Cdev::writeByte(m_slaveAddr, MPU9150_I2C_MST_DELAY_CTRL, 0x3))
         return -25;
+
+    if (!I2Cdev::writeByte(m_slaveAddr, MPU9150_YG_OFFS_TC, 0x80))
+        return -26;
+
+    if (!setCompassRate())
+        return -27;
 
     //  enable the sensors
 
     if (!I2Cdev::writeByte(m_slaveAddr, MPU9150_PWR_MGMT_1, 1))
-        return -26;
+        return -28;
 
     if (!I2Cdev::writeByte(m_slaveAddr, MPU9150_PWR_MGMT_2, 0))
-         return -27;
+         return -29;
 
     //  select the data to go into the FIFO and enable
 
     if (!resetFifo())
-        return -28;
+        return -30;
 
     m_gyroAlpha = 1.0f / m_sampleRate;
     m_gyroStartTime = millis();
@@ -320,6 +312,7 @@ bool RTIMUMPU9150::bypassOn()
         return false;
 
     userControl &= ~0x20;
+	userControl |= 2;
 
     if (!I2Cdev::writeByte(m_slaveAddr, MPU9150_USER_CTRL, userControl))
         return false;
