@@ -30,6 +30,7 @@ class RTIMUSettings
 {
 public:
     RTIMUSettings();
+	bool discoverIMU(int& imuType, unsigned char& slaveAddress);
 
     //  These are the local variables
 
@@ -45,33 +46,6 @@ public:
     int m_MPU9150GyroAccelLpf;                              // low pass filter code for the gyro and accel
     int m_MPU9150GyroFsr;                                   // FSR code for the gyro
     int m_MPU9150AccelFsr;                                  // FSR code for the accel
-
-    //  GD20HM303D
-
-    int m_GD20HM303DGyroSampleRate;                         // the gyro sample rate
-    int m_GD20HM303DGyroBW;                                 // the gyro bandwidth code
-    int m_GD20HM303DGyroHpf;                                // the gyro high pass filter cutoff code
-    int m_GD20HM303DGyroFsr;                                // the gyro full scale range
-
-    int m_GD20HM303DAccelSampleRate;                        // the accel sample rate
-    int m_GD20HM303DAccelFsr;                               // the accel full scale range
-    int m_GD20HM303DAccelLpf;                               // the accel low pass filter
-
-    int m_GD20HM303DCompassSampleRate;                      // the compass sample rate
-    int m_GD20HM303DCompassFsr;                             // the compass full scale range
-
-    //  GD20M303DLHC
-
-    int m_GD20M303DLHCGyroSampleRate;                       // the gyro sample rate
-    int m_GD20M303DLHCGyroBW;                               // the gyro bandwidth code
-    int m_GD20M303DLHCGyroHpf;                              // the gyro high pass filter cutoff code
-    int m_GD20M303DLHCGyroFsr;                              // the gyro full scale range
-
-    int m_GD20M303DLHCAccelSampleRate;                      // the accel sample rate
-    int m_GD20M303DLHCAccelFsr;                             // the accel full scale range
-
-    int m_GD20M303DLHCCompassSampleRate;                    // the compass sample rate
-    int m_GD20M303DLHCCompassFsr;                           // the compass full scale range
 
     //  LSM9DS0
 

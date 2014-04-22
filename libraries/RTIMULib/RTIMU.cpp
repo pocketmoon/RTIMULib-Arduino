@@ -26,25 +26,22 @@
 #include "CalLib.h"
 
 #include "RTIMUMPU9150.h"
-//#include "RTIMUGD20HM303D.h"
-//#include "RTIMUGD20M303DLHC.h"
-//#include "RTIMULSM9DS0.h"
+#include "RTIMULSM9DS0.h"
 
 RTIMU *RTIMU::createIMU(RTIMUSettings *settings)
 {
     switch (settings->m_imuType) {
     case RTIMU_TYPE_MPU9150:
         return new RTIMUMPU9150(settings);
-/*
-    case RTIMU_TYPE_GD20HM303D:
-        return new RTIMUGD20HM303D(settings);
-
-    case RTIMU_TYPE_GD20M303DLHC:
-        return new RTIMUGD20M303DLHC(settings);
 
     case RTIMU_TYPE_LSM9DS0:
         return new RTIMULSM9DS0(settings);
-		*/
+		
+    case RTIMU_TYPE_AUTODISCOVER:
+        if (settings->discoverIMU(settings->m_imuType, settings->m_I2CSlaveAddress)) {
+            return RTIMU::createIMU(settings);
+        }
+        return NULL;
 
     default:
         return 0;
@@ -69,7 +66,6 @@ void RTIMU::setCalibrationData()
     float maxDelta = -1;
     float delta;
 	CALLIB_DATA calData;                                    
-	int device;
 
 	m_calibrationValid = false;
 

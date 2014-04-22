@@ -28,9 +28,8 @@
 
 //  IMU type codes
 
-#define RTIMU_TYPE_MPU9150                  0                   // InvenSense MPU9150
-#define RTIMU_TYPE_GD20HM303D               1                   // STM L3GD20H/LSM303D (Pololu Altimu)
-#define RTIMU_TYPE_GD20M303DLHC             2                   // STM L3GD20/LSM303DHLC (Adafruit IMU)
-#define RTIMU_TYPE_LSM9DS0                  3                   // STM LSM9DS0 (eg Sparkfun IMU)
+#define RTIMU_TYPE_AUTODISCOVER             0                   // Auto discover IMU type and address
+#define RTIMU_TYPE_MPU9150                  1                   // InvenSense MPU9150
+#define RTIMU_TYPE_LSM9DS0                  2                   // STM LSM9DS0 (eg Sparkfun IMU)
 
 #endif // _RTIMULIBDEFS_H

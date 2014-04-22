@@ -23,9 +23,7 @@
 
 #include "RTIMUSettings.h"
 #include "RTIMUMPU9150.h"
-//#include "RTIMUGD20HM303D.h"
-//#include "RTIMUGD20M303DLHC.h"
-//#include "RTIMULSM9DS0.h"
+#include "RTIMULSM9DS0.h"
 
 #define RATE_TIMER_INTERVAL 2
 
@@ -33,43 +31,16 @@ RTIMUSettings::RTIMUSettings()
 {
     //  preset general defaults
 
-    m_imuType = RTIMU_TYPE_MPU9150;
-    m_I2CSlaveAddress = MPU9150_ADDRESS0;
+    m_imuType = RTIMU_TYPE_AUTODISCOVER;
+    m_I2CSlaveAddress = 0;
 
     //  MPU9150 defaults
 
-    m_MPU9150GyroAccelSampleRate = 125;
+    m_MPU9150GyroAccelSampleRate = 50;
     m_MPU9150CompassSampleRate = 25;
     m_MPU9150GyroAccelLpf = MPU9150_LPF_20;
     m_MPU9150GyroFsr = MPU9150_GYROFSR_1000;
     m_MPU9150AccelFsr = MPU9150_ACCELFSR_8;
-/*
-    //  GD20HM303D defaults
-
-    m_GD20HM303DGyroSampleRate = L3GD20H_SAMPLERATE_50;
-    m_GD20HM303DGyroBW = L3GD20H_BANDWIDTH_1;
-    m_GD20HM303DGyroHpf = L3GD20H_HPF_4;
-    m_GD20HM303DGyroFsr = L3GD20H_FSR_500;
-
-    m_GD20HM303DAccelSampleRate = LSM303D_ACCEL_SAMPLERATE_50;
-    m_GD20HM303DAccelFsr = LSM303D_ACCEL_FSR_8;
-    m_GD20HM303DAccelLpf = LSM303D_ACCEL_LPF_50;
-
-    m_GD20HM303DCompassSampleRate = LSM303D_COMPASS_SAMPLERATE_50;
-    m_GD20HM303DCompassFsr = LSM303D_COMPASS_FSR_2;
-
-    //  GD20M303DLHC defaults
-
-    m_GD20M303DLHCGyroSampleRate = L3GD20_SAMPLERATE_95;
-    m_GD20M303DLHCGyroBW = L3GD20_BANDWIDTH_1;
-    m_GD20M303DLHCGyroHpf = L3GD20_HPF_4;
-    m_GD20M303DLHCGyroFsr = L3GD20H_FSR_500;
-
-    m_GD20M303DLHCAccelSampleRate = LSM303DLHC_ACCEL_SAMPLERATE_50;
-    m_GD20M303DLHCAccelFsr = LSM303DLHC_ACCEL_FSR_8;
-
-    m_GD20M303DLHCCompassSampleRate = LSM303DLHC_COMPASS_SAMPLERATE_30;
-    m_GD20M303DLHCCompassFsr = LSM303DLHC_COMPASS_FSR_1_3;
 
     //  LSM9DS0 defaults
 
@@ -84,5 +55,52 @@ RTIMUSettings::RTIMUSettings()
 
     m_LSM9DS0CompassSampleRate = LSM9DS0_COMPASS_SAMPLERATE_50;
     m_LSM9DS0CompassFsr = LSM9DS0_COMPASS_FSR_2;
-	*/
+}
+
+bool RTIMUSettings::discoverIMU(int& imuType, unsigned char& slaveAddress)
+{
+    unsigned char result;
+    unsigned char altResult;
+
+    if (I2Cdev::readByte(MPU9150_ADDRESS0, MPU9150_WHO_AM_I, &result)) {
+        if (result == MPU9150_ID) {
+            imuType = RTIMU_TYPE_MPU9150;
+            slaveAddress = MPU9150_ADDRESS0;
+            return true;
+        }
+    }
+
+    if (I2Cdev::readByte(MPU9150_ADDRESS1, MPU9150_WHO_AM_I, &result)) {
+        if (result == MPU9150_ID) {
+            imuType = RTIMU_TYPE_MPU9150;
+            slaveAddress = MPU9150_ADDRESS1;
+            return true;
+        }
+    }
+
+    if (I2Cdev::readByte(LSM9DS0_GYRO_ADDRESS0, LSM9DS0_WHO_AM_I, &result)) {
+		if (result == LSM9DS0_GYRO_ID) {
+            if (I2Cdev::readByte(LSM9DS0_ACCELMAG_ADDRESS0, LSM9DS0_WHO_AM_I, &altResult)) {
+                if (altResult == LSM9DS0_ACCELMAG_ID) {
+                    imuType = RTIMU_TYPE_LSM9DS0;
+                    slaveAddress = LSM9DS0_GYRO_ADDRESS0;
+                    return true;
+                }
+            }
+        }
+    }
+
+    if (I2Cdev::readByte(LSM9DS0_GYRO_ADDRESS1, LSM9DS0_WHO_AM_I, &result)) {
+		if (result == LSM9DS0_GYRO_ID) {
+            if (I2Cdev::readByte(LSM9DS0_ACCELMAG_ADDRESS1, LSM9DS0_WHO_AM_I, &altResult)) {
+                if (altResult == LSM9DS0_ACCELMAG_ID) {
+                    imuType = RTIMU_TYPE_LSM9DS0;
+                    slaveAddress = LSM9DS0_GYRO_ADDRESS1;
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
 }
