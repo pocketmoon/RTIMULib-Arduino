@@ -6,6 +6,10 @@ Check out www.richards-tech.com for more details, updates and news.
 
 ## Release history
 
+### May 5 2014
+
+Fixed bug in MPU-9150 compass initialization - changed incorrect writeBytes to readBytes to get fuse ROM data.
+
 ### April 22 2014 - 0.9.0
 
 #### First release

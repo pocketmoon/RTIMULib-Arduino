@@ -204,7 +204,7 @@ int RTIMUMPU9150::IMUInit()
         return -13;
     }
 
-    if (!I2Cdev::writeBytes(AK8975_ADDRESS, AK8975_ASAX, 3, asa)) {
+    if (!I2Cdev::readBytes(AK8975_ADDRESS, AK8975_ASAX, 3, asa)) {
         bypassOff();
         return -14;
     }
