@@ -6,6 +6,14 @@ Check out www.richards-tech.com for more details, updates and news.
 
 ## Release history
 
+### September 26 2014 - 2.1.0
+
+Added a new sketch - ArduinoAccel. This shows how to subtract a rotated gravity vector using quaternions
+in order to obtain the residual accelerations. It's basically used in exactly the same way as ArduinoIMU but
+displays the residual accelerations instead. Note that there's no accel calibration at the moment so there 
+will be some residual accelerations indicated that aren't real. Also, as usual (!), it's essential to perform
+magnetometer calibration or else results will be useless.
+
 ### September 26 2014 - 2.0.0
 
 There have been significant changes in this version (V2) to reduce the memory footprint. Instead of the previous
