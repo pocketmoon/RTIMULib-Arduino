@@ -107,6 +107,8 @@ void loop()
       Serial.print("Sample rate: "); Serial.print(sampleCount);
       if (!imu->IMUGyroBiasValid())
         Serial.println(", calculating gyro bias - don't move IMU!!");
+      else
+        Serial.println();
         
       sampleCount = 0;
       lastRate = now;
