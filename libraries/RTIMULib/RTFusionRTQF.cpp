@@ -4,21 +4,21 @@
 //
 //  Copyright (c) 2014, richards-tech
 //
-//  Permission is hereby granted, free of charge, to any person obtaining a copy of 
-//  this software and associated documentation files (the "Software"), to deal in 
-//  the Software without restriction, including without limitation the rights to use, 
-//  copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the 
-//  Software, and to permit persons to whom the Software is furnished to do so, 
+//  Permission is hereby granted, free of charge, to any person obtaining a copy of
+//  this software and associated documentation files (the "Software"), to deal in
+//  the Software without restriction, including without limitation the rights to use,
+//  copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+//  Software, and to permit persons to whom the Software is furnished to do so,
 //  subject to the following conditions:
 //
-//  The above copyright notice and this permission notice shall be included in all 
+//  The above copyright notice and this permission notice shall be included in all
 //  copies or substantial portions of the Software.
 //
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
-//  INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
-//  PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
-//  HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION 
-//  OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+//  INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+//  PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+//  HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+//  OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 //  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "RTFusionRTQF.h"
@@ -74,36 +74,36 @@ void RTFusionRTQF::newIMUData(const RTVector3& gyro, const RTVector3& accel, con
 
 //      predict();
 
-		RTFLOAT x2, y2, z2;
-		RTFLOAT qs, qx, qy,qz;
+        RTFLOAT x2, y2, z2;
+        RTFLOAT qs, qx, qy,qz;
 
-		qs = m_fusionQPose.scalar();
-		qx = m_fusionQPose.x();
-		qy = m_fusionQPose.y();
-		qz = m_fusionQPose.z();
+        qs = m_fusionQPose.scalar();
+        qx = m_fusionQPose.x();
+        qy = m_fusionQPose.y();
+        qz = m_fusionQPose.z();
 
-		x2 = gyro.x() / (RTFLOAT)2.0;
-		y2 = gyro.y() / (RTFLOAT)2.0;
-		z2 = gyro.z() / (RTFLOAT)2.0;
+        x2 = gyro.x() / (RTFLOAT)2.0;
+        y2 = gyro.y() / (RTFLOAT)2.0;
+        z2 = gyro.z() / (RTFLOAT)2.0;
 
-		// Predict new state
+        // Predict new state
 
- 		m_fusionQPose.setScalar(qs + (-x2 * qx - y2 * qy - z2 * qz) * m_timeDelta);
-		m_fusionQPose.setX(qx + (x2 * qs + z2 * qy - y2 * qz) * m_timeDelta);
-		m_fusionQPose.setY(qy + (y2 * qs - z2 * qx + x2 * qz) * m_timeDelta);
-		m_fusionQPose.setZ(qz + (z2 * qs + y2 * qx - x2 * qy) * m_timeDelta);
+        m_fusionQPose.setScalar(qs + (-x2 * qx - y2 * qy - z2 * qz) * m_timeDelta);
+        m_fusionQPose.setX(qx + (x2 * qs + z2 * qy - y2 * qz) * m_timeDelta);
+        m_fusionQPose.setY(qy + (y2 * qs - z2 * qx + x2 * qz) * m_timeDelta);
+        m_fusionQPose.setZ(qz + (z2 * qs + y2 * qx - x2 * qy) * m_timeDelta);
 
 //      update();
 
-		m_stateQError = m_measuredQPose - m_fusionQPose;
+        m_stateQError = m_measuredQPose - m_fusionQPose;
 
-		// make new state estimate
+        // make new state estimate
 
-		RTFLOAT qt = m_Q * m_timeDelta;
+        RTFLOAT qt = m_Q * m_timeDelta;
 
-		m_fusionQPose += m_stateQError * (qt / (qt + m_R));
+        m_fusionQPose += m_stateQError * (qt / (qt + m_R));
 
-		m_fusionQPose.normalize();
+        m_fusionQPose.normalize();
 
         m_fusionQPose.toEuler(m_fusionPose);
     }
@@ -116,13 +116,13 @@ void RTFusionRTQF::calculatePose(const RTVector3& accel, const RTVector3& mag)
 
     accel.accelToEuler(m_measuredPose);
 
-//	q.fromEuler(m_measuredPose);
+//  q.fromEuler(m_measuredPose);
 
     RTFLOAT cosX2 = cos(m_measuredPose.x() / 2.0f);
     RTFLOAT sinX2 = sin(m_measuredPose.x() / 2.0f);
     RTFLOAT cosY2 = cos(m_measuredPose.y() / 2.0f);
     RTFLOAT sinY2 = sin(m_measuredPose.y() / 2.0f);
- 
+
     q.setScalar(cosX2 * cosY2);
     q.setX(sinX2 * cosY2);
     q.setY(cosX2 * sinY2);

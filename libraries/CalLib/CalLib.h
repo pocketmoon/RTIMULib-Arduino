@@ -37,10 +37,10 @@ typedef struct
 {
   unsigned char validL;                 // should contain the valid pattern if a good config
   unsigned char validH;                 // should contain the valid pattern if a good config
-  unsigned char magValid;				// true if data valid
+  unsigned char magValid;               // true if data valid
   unsigned char pad;
-  float magMin[3];					    // min values
-  float magMax[3];					    // max values
+  float magMin[3];                      // min values
+  float magMax[3];                      // max values
 } CALLIB_DATA;
 
 //  calLibErase() erases any current data in the EEPROM

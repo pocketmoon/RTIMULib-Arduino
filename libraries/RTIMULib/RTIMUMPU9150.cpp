@@ -4,25 +4,27 @@
 //
 //  Copyright (c) 2014, richards-tech
 //
-//  Permission is hereby granted, free of charge, to any person obtaining a copy of 
-//  this software and associated documentation files (the "Software"), to deal in 
-//  the Software without restriction, including without limitation the rights to use, 
-//  copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the 
-//  Software, and to permit persons to whom the Software is furnished to do so, 
+//  Permission is hereby granted, free of charge, to any person obtaining a copy of
+//  this software and associated documentation files (the "Software"), to deal in
+//  the Software without restriction, including without limitation the rights to use,
+//  copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+//  Software, and to permit persons to whom the Software is furnished to do so,
 //  subject to the following conditions:
 //
-//  The above copyright notice and this permission notice shall be included in all 
+//  The above copyright notice and this permission notice shall be included in all
 //  copies or substantial portions of the Software.
 //
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
-//  INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
-//  PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
-//  HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION 
-//  OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+//  INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+//  PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+//  HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+//  OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 //  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "RTIMUMPU9150.h"
 #include "RTIMUSettings.h"
+
+#if defined(MPU9150_68) || defined(MPU9150_69)
 
 //  this sets the learning rate for compass running average calculation
 
@@ -63,8 +65,8 @@ bool RTIMUMPU9150::setSampleRate(int rate)
     }
     m_sampleRate = rate;
     m_sampleInterval = (unsigned long)1000 / m_sampleRate;
-	if (m_sampleInterval == 0)
-		m_sampleInterval = 1;
+    if (m_sampleInterval == 0)
+        m_sampleInterval = 1;
     return true;
 }
 
@@ -161,7 +163,7 @@ int RTIMUMPU9150::IMUInit()
     if (!I2Cdev::writeByte(m_slaveAddr, MPU9150_PWR_MGMT_1, 0x80))
         return -1;
 
-	delay(100);
+    delay(100);
 
     if (!I2Cdev::writeByte(m_slaveAddr, MPU9150_PWR_MGMT_1, 0x00))
         return -4;
@@ -190,7 +192,7 @@ int RTIMUMPU9150::IMUInit()
     //  now configure compass
 
     if (!bypassOn())
-		return -11;
+        return -11;
 
     // get fuse ROM data
 
@@ -221,7 +223,7 @@ int RTIMUMPU9150::IMUInit()
     }
 
     if (!bypassOff())
-		return -16;
+        return -16;
 
     //  now set up MPU9150 to talk to the compass chip
 
@@ -312,7 +314,7 @@ bool RTIMUMPU9150::bypassOn()
         return false;
 
     userControl &= ~0x20;
-	userControl |= 2;
+    userControl |= 2;
 
     if (!I2Cdev::writeByte(m_slaveAddr, MPU9150_USER_CTRL, userControl))
         return false;
@@ -479,3 +481,4 @@ bool RTIMUMPU9150::IMURead()
 
     return true;
 }
+#endif

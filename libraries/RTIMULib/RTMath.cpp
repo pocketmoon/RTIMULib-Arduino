@@ -4,21 +4,21 @@
 //
 //  Copyright (c) 2014, richards-tech
 //
-//  Permission is hereby granted, free of charge, to any person obtaining a copy of 
-//  this software and associated documentation files (the "Software"), to deal in 
-//  the Software without restriction, including without limitation the rights to use, 
-//  copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the 
-//  Software, and to permit persons to whom the Software is furnished to do so, 
+//  Permission is hereby granted, free of charge, to any person obtaining a copy of
+//  this software and associated documentation files (the "Software"), to deal in
+//  the Software without restriction, including without limitation the rights to use,
+//  copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+//  Software, and to permit persons to whom the Software is furnished to do so,
 //  subject to the following conditions:
 //
-//  The above copyright notice and this permission notice shall be included in all 
+//  The above copyright notice and this permission notice shall be included in all
 //  copies or substantial portions of the Software.
 //
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
-//  INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
-//  PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
-//  HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION 
-//  OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+//  INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+//  PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+//  HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+//  OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 //  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "RTMath.h"
@@ -26,44 +26,44 @@
 
 void RTMath::display(const char *label, RTVector3& vec)
 {
-	Serial.print(label);
-	Serial.print(" x:"); Serial.print(vec.x());
-	Serial.print(" y:"); Serial.print(vec.y());
-	Serial.print(" z:"); Serial.print(vec.z());
+    Serial.print(label);
+    Serial.print(" x:"); Serial.print(vec.x());
+    Serial.print(" y:"); Serial.print(vec.y());
+    Serial.print(" z:"); Serial.print(vec.z());
 }
 
 void RTMath::displayDegrees(const char *label, RTVector3& vec)
 {
-	Serial.print(label);
-	Serial.print(" x:"); Serial.print(vec.x() * RTMATH_RAD_TO_DEGREE);
-	Serial.print(" y:"); Serial.print(vec.y() * RTMATH_RAD_TO_DEGREE);
-	Serial.print(" z:"); Serial.print(vec.z() * RTMATH_RAD_TO_DEGREE);
+    Serial.print(label);
+    Serial.print(" x:"); Serial.print(vec.x() * RTMATH_RAD_TO_DEGREE);
+    Serial.print(" y:"); Serial.print(vec.y() * RTMATH_RAD_TO_DEGREE);
+    Serial.print(" z:"); Serial.print(vec.z() * RTMATH_RAD_TO_DEGREE);
 }
 
 void RTMath::display(const char *label, RTQuaternion& quat)
 {
-	Serial.print(label);
-	Serial.print(" scalar:"); Serial.print(quat.scalar());
-	Serial.print(" x:"); Serial.print(quat.x());
-	Serial.print(" y:"); Serial.print(quat.y());
-	Serial.print(" z:"); Serial.print(quat.z());
+    Serial.print(label);
+    Serial.print(" scalar:"); Serial.print(quat.scalar());
+    Serial.print(" x:"); Serial.print(quat.x());
+    Serial.print(" y:"); Serial.print(quat.y());
+    Serial.print(" z:"); Serial.print(quat.z());
 }
 
 RTFLOAT RTMath::invSqRt(RTFLOAT x)
 {
-	long i;
-	float x2, y;
-	void *temp;
-	
-	x2 = x * 0.5f;
-	y = x;
-	temp = &y;
-	i = *(long *)temp;
-	i = 0x5f3759df - (i >> 1);
-	temp = &i;
-	y = *(float *)temp;
-	y = y * (1.5f - (x2 * y * y));
-	return y;
+    long i;
+    float x2, y;
+    void *temp;
+
+    x2 = x * 0.5f;
+    y = x;
+    temp = &y;
+    i = *(long *)temp;
+    i = 0x5f3759df - (i >> 1);
+    temp = &i;
+    y = *(float *)temp;
+    y = y * (1.5f - (x2 * y * y));
+    return y;
 }
 
 RTVector3 RTMath::poseFromAccelMag(const RTVector3& accel, const RTVector3& mag)

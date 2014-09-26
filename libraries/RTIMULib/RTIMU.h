@@ -4,21 +4,21 @@
 //
 //  Copyright (c) 2014, richards-tech
 //
-//  Permission is hereby granted, free of charge, to any person obtaining a copy of 
-//  this software and associated documentation files (the "Software"), to deal in 
-//  the Software without restriction, including without limitation the rights to use, 
-//  copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the 
-//  Software, and to permit persons to whom the Software is furnished to do so, 
+//  Permission is hereby granted, free of charge, to any person obtaining a copy of
+//  this software and associated documentation files (the "Software"), to deal in
+//  the Software without restriction, including without limitation the rights to use,
+//  copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+//  Software, and to permit persons to whom the Software is furnished to do so,
 //  subject to the following conditions:
 //
-//  The above copyright notice and this permission notice shall be included in all 
+//  The above copyright notice and this permission notice shall be included in all
 //  copies or substantial portions of the Software.
 //
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
-//  INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
-//  PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
-//  HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION 
-//  OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+//  INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+//  PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+//  HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+//  OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 //  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #ifndef _RTIMU_H
@@ -68,19 +68,19 @@ public:
 
     bool getCalibrationValid() { return !m_calibrationMode && m_calibrationValid; }
 
-    inline const RTVector3& getGyro() { return m_gyro; }			// gets gyro rates in radians/sec
-    inline const RTVector3& getAccel() { return m_accel; }			// get accel data in gs
-    inline const RTVector3& getCompass() { return m_compass; }		// gets compass data in uT
-	inline unsigned long getTimestamp() { return m_timestamp; }		// and the timestamp for it
+    inline const RTVector3& getGyro() { return m_gyro; }            // gets gyro rates in radians/sec
+    inline const RTVector3& getAccel() { return m_accel; }          // get accel data in gs
+    inline const RTVector3& getCompass() { return m_compass; }      // gets compass data in uT
+    inline unsigned long getTimestamp() { return m_timestamp; }     // and the timestamp for it
 
 protected:
     bool m_calibrationMode;                                 // true if cal mode so don't use cal data!
     bool m_calibrationValid;                                // tru if call data is valid and can be used
 
-    RTVector3 m_gyro;										// the gyro readings
-    RTVector3 m_accel;										// the accel readings
-    RTVector3 m_compass;									// the compass readings
-	unsigned long m_timestamp;								// the timestamp
+    RTVector3 m_gyro;                                       // the gyro readings
+    RTVector3 m_accel;                                      // the accel readings
+    RTVector3 m_compass;                                    // the compass readings
+    unsigned long m_timestamp;                              // the timestamp
 
     RTIMUSettings *m_settings;                              // the settings object pointer
 
