@@ -217,6 +217,23 @@ void RTVector3::normalize()
     m_data[2] *= invLength;
 }
 
+RTFLOAT RTVector3::length()
+{
+    RTFLOAT invLength = RTMath::invSqRt(m_data[0] * m_data[0] + m_data[1] * m_data[1] +
+            m_data[2] * m_data[2]);
+
+    if (invLength == 0)
+        return 0;
+    else
+        return 1/invLength;
+}
+
+RTFLOAT RTVector3::squareLength()
+{
+   return m_data[0] * m_data[0] + m_data[1] * m_data[1] +
+            m_data[2] * m_data[2];
+}
+
 //----------------------------------------------------------
 //
 //  The RTQuaternion class

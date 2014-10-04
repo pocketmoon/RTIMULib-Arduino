@@ -28,6 +28,9 @@
 #include "RTIMULibDefs.h"
 #include "I2Cdev.h"
 
+#define I2CWrite(x, y, z) I2Cdev::writeByte(x, y, z)
+#define I2CRead(w, x, y, z) I2Cdev::readBytes(w, x, y, z)
+
 class RTIMUSettings;
 
 class RTIMU
@@ -49,7 +52,6 @@ public:
     virtual int IMUInit() = 0;                              // set up the IMU
     virtual int IMUGetPollInterval() = 0;                   // returns the recommended poll interval in mS
     virtual bool IMURead() = 0;                             // get a sample
-    virtual bool IMUGyroBiasValid() = 0;                    // returns true if valid bias
 
     //  This one wanted a similar name but isn't pure virtual
 
@@ -68,12 +70,19 @@ public:
 
     bool getCalibrationValid() { return !m_calibrationMode && m_calibrationValid; }
 
+    // returns true if enough samples for valid data
+
+    virtual bool IMUGyroBiasValid();
+
     inline const RTVector3& getGyro() { return m_gyro; }            // gets gyro rates in radians/sec
     inline const RTVector3& getAccel() { return m_accel; }          // get accel data in gs
     inline const RTVector3& getCompass() { return m_compass; }      // gets compass data in uT
     inline unsigned long getTimestamp() { return m_timestamp; }     // and the timestamp for it
 
 protected:
+    void gyroBiasInit();                                    // sets up gyro bias calculation
+    void handleGyroBias();                                  // adjust gyro for bias
+    void calibrateAverageCompass();                         // calibrate and smooth compass
     bool m_calibrationMode;                                 // true if cal mode so don't use cal data!
     bool m_calibrationValid;                                // tru if call data is valid and can be used
 
@@ -84,8 +93,20 @@ protected:
 
     RTIMUSettings *m_settings;                              // the settings object pointer
 
+    int m_sampleRate;                                       // samples per second
+    uint64_t m_sampleInterval;                              // interval between samples in microseonds
+
+    RTFLOAT m_gyroAlpha;                                    // gyro bias learning rate
+    int m_gyroSampleCount;                                  // number of gyro samples used
+    bool m_gyroBiasValid;                                   // true if the recorded gyro bias is valid
+    RTVector3 m_gyroBias;                                   // the recorded gyro bias
+
+    RTVector3 m_previousAccel;                              // previous step accel for gyro learning
+
     float m_compassCalOffset[3];
     float m_compassCalScale[3];
+    RTVector3 m_compassAverage;                             // a running average to smooth the mag outputs
+
  };
 
 #endif // _RTIMU_H

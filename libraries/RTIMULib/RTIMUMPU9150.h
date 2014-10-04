@@ -128,7 +128,6 @@ public:
     virtual int IMUInit();
     virtual bool IMURead();
     virtual int IMUGetPollInterval();
-    virtual bool IMUGyroBiasValid() { return !m_gyroLearning; }
 
 private:
     bool bypassOn();                                        // talk to compass
@@ -143,8 +142,6 @@ private:
     unsigned char m_bus;                                    // I2C bus (usually 1 for Raspberry Pi for example)
 
     unsigned char m_lpf;                                    // low pass filter setting
-    int m_sampleRate;                                       // sample rate in Hz for gyro and accel
-    unsigned long m_sampleInterval;                         // interval between samples in milliseconds
     int m_compassRate;                                      // compass sample rate in Hz
     unsigned char m_gyroFsr;
     unsigned char m_accelFsr;
@@ -153,13 +150,6 @@ private:
     RTFLOAT m_accelScale;
 
     RTFLOAT m_compassAdjust[3];                             // the compass fuse ROM values converted for use
-
-    RTVector3 m_gyroBias;                                   // an accumulated bias for the gyros
-    RTFLOAT m_gyroAlpha;                                    // gyro bias learning rate
-    unsigned long m_gyroStartTime;                          // time at which the learning started
-    bool m_gyroLearning;                                    // if in learning mode
-
-    RTVector3 m_compassAverage;                             // a running average to smooth the mag outputs
 };
 
 #endif // _RTIMUMPU9150_H

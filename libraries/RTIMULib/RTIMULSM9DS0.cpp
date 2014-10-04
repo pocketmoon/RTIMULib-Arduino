@@ -26,9 +26,6 @@
 
 #if defined(LSM9DS0_6a) || defined(LSM9DS0_6b)
 
-//  this sets the learning rate for compass running average calculation
-
-#define COMPASS_ALPHA 0.2f
 
 RTIMULSM9DS0::RTIMULSM9DS0(RTIMUSettings *settings) : RTIMU(settings)
 {
@@ -101,9 +98,7 @@ int RTIMULSM9DS0::IMUInit()
     if (!setGyroCTRL5())
             return -14;
 
-    m_gyroAlpha = 1.0f / m_sampleRate;
-    m_gyroStartTime = millis();
-    m_gyroLearning = true;
+    gyroBiasInit();
     return 1;
 }
 
@@ -345,22 +340,10 @@ bool RTIMULSM9DS0::IMURead()
     RTMath::convertToVector(accelData, m_accel, m_accelScale, false);
     RTMath::convertToVector(compassData, m_compass, m_compassScale, false);
 
-    if (m_gyroLearning) {
-        // update gyro bias
+    //  sort out gyro axes
 
-        m_gyroBias.setX((1.0 - m_gyroAlpha) * m_gyroBias.x() + m_gyroAlpha * m_gyro.x());
-        m_gyroBias.setY((1.0 - m_gyroAlpha) * m_gyroBias.y() + m_gyroAlpha * m_gyro.y());
-        m_gyroBias.setZ((1.0 - m_gyroAlpha) * m_gyroBias.z() + m_gyroAlpha * m_gyro.z());
-
-        if ((millis() - m_gyroStartTime) > 5000)
-            m_gyroLearning = false;                     // only do this for 5 seconds
-    }
-
-    //  sort out gyro axes and correct for bias
-
-    m_gyro.setX(m_gyro.x() - m_gyroBias.x());
-    m_gyro.setY(-(m_gyro.y() - m_gyroBias.y()));
-    m_gyro.setZ(-(m_gyro.z() - m_gyroBias.z()));
+    m_gyro.setY(-m_gyro.y());
+    m_gyro.setZ(-m_gyro.z());
 
     //  sort out accel data;
 
@@ -370,20 +353,10 @@ bool RTIMULSM9DS0::IMURead()
 
     m_compass.setY(-m_compass.y());
 
-    //  calibrate if required
+    //  now do standard processing
 
-    if (!m_calibrationMode && m_calibrationValid) {
-        m_compass.setX((m_compass.x() - m_compassCalOffset[0]) * m_compassCalScale[0]);
-        m_compass.setY((m_compass.y() - m_compassCalOffset[1]) * m_compassCalScale[1]);
-        m_compass.setZ((m_compass.z() - m_compassCalOffset[2]) * m_compassCalScale[2]);
-    }
-
-    //  update running average
-
-    m_compassAverage.setX(m_compass.x() * COMPASS_ALPHA + m_compassAverage.x() * (1.0 - COMPASS_ALPHA));
-    m_compassAverage.setY(m_compass.y() * COMPASS_ALPHA + m_compassAverage.y() * (1.0 - COMPASS_ALPHA));
-    m_compassAverage.setZ(m_compass.z() * COMPASS_ALPHA + m_compassAverage.z() * (1.0 - COMPASS_ALPHA));
-    m_compass = m_compassAverage;
+    handleGyroBias();
+    calibrateAverageCompass();
 
     return true;
 }

@@ -212,8 +212,7 @@ public:
     virtual int IMUInit();
     virtual int IMUGetPollInterval();
     virtual bool IMURead();
-    virtual bool IMUGyroBiasValid() { return !m_gyroLearning; }
-
+ 
 private:
     bool setGyroSampleRate();
     bool setGyroCTRL2();
@@ -229,19 +228,9 @@ private:
     unsigned char m_accelCompassSlaveAddr;                  // I2C address of accel and mag
     unsigned char m_bus;                                    // I2C bus (usually 1 for Raspberry Pi for example)
 
-    int m_sampleRate;                                       // samples per second
-    unsigned long m_sampleInterval;                          // interval between samples in microseonds
-
     RTFLOAT m_gyroScale;
     RTFLOAT m_accelScale;
     RTFLOAT m_compassScale;
-
-    RTVector3 m_gyroBias;                                   // an accumulated bias for the gyros
-    float m_gyroAlpha;                                      // gyro bias learning rate
-    unsigned long m_gyroStartTime;                          // time at which the learning started
-    bool m_gyroLearning;                                    // if in learning mode
-
-    RTVector3 m_compassAverage;                             // a running average to smooth the mag outputs
 
 #ifdef LSM9DS0_CACHE_MODE
     bool m_firstTime;                                       // if first sample
