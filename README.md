@@ -10,7 +10,7 @@ Note that any older release can be obtained via the Releases tab on the repo's G
 
 ### October 4 2014 - 2.2.0
 
-Added support for the L3GD20 + LSM303DLHC IMU combo and the L3GD20H + LSM303D combo. As a result, there are an increased number of #defines in RTIMULibDefs.h, only once of which should be un-commented in order to select the IMU in use. By default, it now looks like:
+Added support for the L3GD20 + LSM303DLHC IMU combo and the L3GD20H + LSM303D combo. As a result, there are an increased number of #defines in RTIMULibDefs.h, only one of which should be un-commented in order to select the IMU in use. By default, it now looks like:
 
 	#define MPU9150_68                      // MPU9150 at address 0x68
 	//#define MPU9150_69                      // MPU9150 at address 0x69
