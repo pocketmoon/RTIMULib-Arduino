@@ -24,6 +24,8 @@
 #ifndef _RTFUSIONRTQF_H
 #define	_RTFUSIONRTQF_H
 
+#ifndef RTARDULINK_MODE
+
 #include "RTMath.h"
 
 class RTFusionRTQF
@@ -69,5 +71,7 @@ private:
     bool m_firstTime;                                       // if first time after reset
     unsigned long m_lastFusionTime;                         // for delta time calculation
 };
+
+#endif // #ifndef RTARDULINK_MODE
 
 #endif // _RTFUSIONRTQF_H

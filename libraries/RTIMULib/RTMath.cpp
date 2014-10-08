@@ -24,6 +24,7 @@
 #include "RTMath.h"
 #include <Arduino.h>
 
+#ifndef RTARDULINK_MODE
 void RTMath::display(const char *label, RTVector3& vec)
 {
     Serial.print(label);
@@ -111,7 +112,7 @@ void RTMath::convertToVector(unsigned char *rawData, RTVector3& vec, RTFLOAT sca
      }
 }
 
-
+#endif // #ifndef RTARDULINK_MODE
 
 //----------------------------------------------------------
 //
@@ -162,7 +163,7 @@ void RTVector3::zero()
         m_data[i] = 0;
 }
 
-
+#ifndef RTARDULINK_MODE
 RTFLOAT RTVector3::dotProduct(const RTVector3& a, const RTVector3& b)
 {
     return a.x() * b.x() + a.y() * b.y() + a.z() * b.z();
@@ -228,12 +229,15 @@ RTFLOAT RTVector3::length()
         return 1/invLength;
 }
 
+#endif // #ifndef RTARDULINK_MODE
+
 RTFLOAT RTVector3::squareLength()
 {
    return m_data[0] * m_data[0] + m_data[1] * m_data[1] +
             m_data[2] * m_data[2];
 }
 
+#ifndef RTARDULINK_MODE
 //----------------------------------------------------------
 //
 //  The RTQuaternion class
@@ -263,8 +267,6 @@ RTQuaternion& RTQuaternion::operator =(const RTQuaternion& quat)
 
     return *this;
 }
-
-
 
 RTQuaternion& RTQuaternion::operator +=(const RTQuaternion& quat)
 {
@@ -441,3 +443,4 @@ void RTQuaternion::fromAngleVector(const RTFLOAT& angle, const RTVector3& vec)
     m_data[2] = vec.y() * sinHalfTheta;
     m_data[3] = vec.z() * sinHalfTheta;
 }
+#endif // #ifndef RTARDULINK_MODE

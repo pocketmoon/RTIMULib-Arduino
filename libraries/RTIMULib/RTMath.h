@@ -42,11 +42,15 @@ typedef float RTFLOAT;
 #define	RTMATH_RAD_TO_DEGREE        (180.0 / M_PI)
 
 class RTVector3;
+
+#ifndef RTARDULINK_MODE
 class RTQuaternion;
+#endif
 
 class RTMath
 {
 public:
+#ifndef RTARDULINK_MODE
     // convenient display routines
 
     static void display(const char *label, RTVector3& vec);
@@ -68,6 +72,7 @@ public:
 
 private:
     static char m_string[1000];                             // for the display routines
+#endif // #ifndef RTARDULINK_MODE
 };
 
 
@@ -82,18 +87,8 @@ public:
 
     RTVector3& operator =(const RTVector3& vec);
 
-    RTFLOAT length();
     RTFLOAT squareLength();
-    void normalize();
     void zero();
-    const char *display();
-    const char *displayDegrees();
-
-    static float dotProduct(const RTVector3& a, const RTVector3& b);
-    static void crossProduct(const RTVector3& a, const RTVector3& b, RTVector3& d);
-
-    void accelToEuler(RTVector3& rollPitchYaw) const;
-    void accelToQuaternion(RTQuaternion& qPose) const;
 
     inline RTFLOAT x() const { return m_data[0]; }
     inline RTFLOAT y() const { return m_data[1]; }
@@ -105,11 +100,25 @@ public:
     inline void setZ(const RTFLOAT val) { m_data[2] = val; }
     inline void setData(const int i, RTFLOAT val) { m_data[i] = val; }
 
+    #ifndef RTARDULINK_MODE
+    RTFLOAT length();
+    void normalize();
+
+    const char *display();
+    const char *displayDegrees();
+
+    static float dotProduct(const RTVector3& a, const RTVector3& b);
+    static void crossProduct(const RTVector3& a, const RTVector3& b, RTVector3& d);
+
+    void accelToEuler(RTVector3& rollPitchYaw) const;
+    void accelToQuaternion(RTQuaternion& qPose) const;
+#endif // #ifndef RTARDULINK_MODE
+
 private:
     RTFLOAT m_data[3];
 };
 
-
+#ifndef RTARDULINK_MODE
 class RTQuaternion
 {
 public:
@@ -153,5 +162,6 @@ public:
 private:
     RTFLOAT m_data[4];
 };
+#endif // #ifndef RTARDULINK_MODE
 
 #endif /* _RTMATH_H_ */

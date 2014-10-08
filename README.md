@@ -8,6 +8,12 @@ Check out www.richards-tech.com for more details, updates and news.
 
 Note that any older release can be obtained via the Releases tab on the repo's GitHub page.
 
+### October 8 2014 - 2.3.0
+
+Added new example sketch RTArduLinkIMU. This is a stripped-down version of the software that is intended for use with the RTHostIMU and RTHostIMUGL apps in the RTIMULib repo. Basically, RTArduLinkIMU just collects the sensor data from the IMU chip and sends it to the connected host. Tests with the MPU9150 IMU have shown that up to 200 samples per second is possible. Sensor fusion is performed on the host rather than the Arduino. See the notes in the RTIMULib repo for more information on how to use RTArduLinkIMU with the host applications.
+
+RTArduLinkIMU uses RTArduLink to connect to the host. The default configuration is correct but if there's any need to change or review, the RTArduLink repo has a sketch called RTArduLinkConfig that can be used to set things up. Check the documentation in the RTArduLink repo for more details.
+
 ### October 4 2014 - 2.2.0
 
 Added support for the L3GD20 + LSM303DLHC IMU combo and the L3GD20H + LSM303D combo. As a result, there are an increased number of #defines in RTIMULibDefs.h, only one of which should be un-commented in order to select the IMU in use. By default, it now looks like:

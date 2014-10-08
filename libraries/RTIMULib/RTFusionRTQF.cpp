@@ -21,6 +21,8 @@
 //  OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 //  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+#ifndef RTARDULINK_MODE
+
 #include "RTFusionRTQF.h"
 
 //  The QVALUE affects the gyro response.
@@ -164,3 +166,4 @@ void RTFusionRTQF::calculatePose(const RTVector3& accel, const RTVector3& mag)
         m_measuredQPose.toEuler(m_measuredPose);
     }
 }
+#endif // #ifndef RTARDULINK_MODE
