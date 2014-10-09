@@ -58,7 +58,7 @@ void setup()
    
     imu = RTIMU::createIMU(&settings);                  // create the imu object
     
-    Serial.print("ArduinoIMU starting using device "); Serial.println(imu->IMUName());
+    Serial.print("RTArduLinkIMU starting using device "); Serial.println(imu->IMUName());
     if ((errcode = imu->IMUInit()) < 0) {
         Serial.print("Failed to init IMU: "); Serial.println(errcode);
     }
@@ -67,6 +67,8 @@ void setup()
         Serial.println("Using compass calibration");
     else
         Serial.println("No valid compass calibration data");
+
+    RTArduLinkHALEEPROMDisplay();
 
     linkIMU.sendDebugMessage("RTArduLinkIMU starting");
 }

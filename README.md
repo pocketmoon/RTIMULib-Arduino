@@ -8,6 +8,10 @@ Check out www.richards-tech.com for more details, updates and news.
 
 Note that any older release can be obtained via the Releases tab on the repo's GitHub page.
 
+### October 9 2014 - 2.3.1
+
+Updated to include revised RTArduLink with new config EEPROM signature.
+
 ### October 8 2014 - 2.3.0
 
 Added new example sketch RTArduLinkIMU. This is a stripped-down version of the software that is intended for use with the RTHostIMU and RTHostIMUGL apps in the RTIMULib repo. Basically, RTArduLinkIMU just collects the sensor data from the IMU chip and sends it to the connected host. Tests with the MPU9150 IMU have shown that up to 200 samples per second is possible. Sensor fusion is performed on the host rather than the Arduino. See the notes in the RTIMULib repo for more information on how to use RTArduLinkIMU with the host applications.
