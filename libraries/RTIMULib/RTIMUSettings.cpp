@@ -51,11 +51,11 @@ RTIMUSettings::RTIMUSettings()
 #ifdef MPU9150_68
     //  MPU9150 defaults
 
-    m_MPU9150GyroAccelSampleRate = 50;
-    m_MPU9150CompassSampleRate = 25;
-    m_MPU9150GyroAccelLpf = MPU9150_LPF_20;
-    m_MPU9150GyroFsr = MPU9150_GYROFSR_1000;
-    m_MPU9150AccelFsr = MPU9150_ACCELFSR_8;
+    m_MPU9150GyroAccelSampleRate = 100;
+    m_MPU9150CompassSampleRate = 100;
+    m_MPU9150GyroAccelLpf = MPU9150_LPF_42;
+    m_MPU9150GyroFsr = MPU9150_GYROFSR_500;
+    m_MPU9150AccelFsr = MPU9150_ACCELFSR_4;
     m_imuType = RTIMU_TYPE_MPU9150;
     m_I2CSlaveAddress = MPU9150_ADDRESS0;
 #endif
@@ -63,11 +63,11 @@ RTIMUSettings::RTIMUSettings()
 #ifdef MPU9150_69
     //  MPU9150 defaults
 
-    m_MPU9150GyroAccelSampleRate = 50;
-    m_MPU9150CompassSampleRate = 25;
-    m_MPU9150GyroAccelLpf = MPU9150_LPF_20;
-    m_MPU9150GyroFsr = MPU9150_GYROFSR_1000;
-    m_MPU9150AccelFsr = MPU9150_ACCELFSR_8;
+    m_MPU9150GyroAccelSampleRate = 100;
+    m_MPU9150CompassSampleRate = 100;
+    m_MPU9150GyroAccelLpf = MPU9150_LPF_42;
+    m_MPU9150GyroFsr = MPU9150_GYROFSR_500;
+    m_MPU9150AccelFsr = MPU9150_ACCELFSR_4;
     m_imuType = RTIMU_TYPE_MPU9150;
     m_I2CSlaveAddress = MPU9150_ADDRESS1;
 #endif
