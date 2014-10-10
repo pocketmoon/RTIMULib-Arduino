@@ -27,7 +27,7 @@
 
 //  this sets the learning rate for compass running average calculation
 
-#define COMPASS_ALPHA                   (RTFLOAT)0.2
+#define COMPASS_ALPHA                   (RTFLOAT)0.05
 
 //  this defines the accelerometer noise level
 
