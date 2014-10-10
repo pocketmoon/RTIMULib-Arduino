@@ -207,10 +207,10 @@ int RTIMUMPU9150::IMUInit()
     }
 
     //  convert asa to usable scale factor
-
-    m_compassAdjust[0] = ((float)asa[0] - 128.0) / 256.0 + 1.0f;
-    m_compassAdjust[1] = ((float)asa[1] - 128.0) / 256.0 + 1.0f;
-    m_compassAdjust[2] = ((float)asa[2] - 128.0) / 256.0 + 1.0f;
+    
+    m_compassAdjust[0] = ((float)asa[0] / 256.0) + 0.5f;
+    m_compassAdjust[1] = ((float)asa[1] / 256.0) + 0.5f;
+    m_compassAdjust[2] = ((float)asa[2] / 256.0) + 0.5f;
 
     if (!I2Cdev::writeByte(AK8975_ADDRESS, AK8975_CNTL, 0)) {
         bypassOff();
