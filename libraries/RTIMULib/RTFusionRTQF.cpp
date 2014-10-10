@@ -31,8 +31,8 @@
 
 //  The RVALUE controls the influence of the accels and compass.
 //  The bigger the value, the more sluggish the response.
-
-#define RTQF_RVALUE	0.0005f
+//  Increased to help filter noisy mag on 9150
+#define RTQF_RVALUE	0.0020f 
 
 
 RTFusionRTQF::RTFusionRTQF()
